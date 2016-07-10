@@ -99,7 +99,7 @@
     getComments: function(success, error) {
         $.ajax({
             type: 'get',
-            url: '/api/comments/',
+            url: '/api/comments/getComments',
             success: function(commentsArray) {
                 success(commentsArray)
             },
@@ -109,7 +109,7 @@
     postComment: function(commentJSON, success, error) {
         $.ajax({
             type: 'post',
-            url: '/api/comments/',
+            url: '/api/comments/addComment',
             data: commentJSON,
             success: function(comment) {
                 success(comment)
@@ -123,7 +123,7 @@
     putComment: function(commentJSON, success, error) {
         $.ajax({
             type: 'put',
-            url: '/api/comments/' + commentJSON.id,
+            url: '/api/comments/addComment',
             data: commentJSON,
             success: function(comment) {
                 success(comment)
@@ -134,7 +134,7 @@
     deleteComment: function(commentJSON, success, error) {
         $.ajax({
             type: 'delete',
-            url: '/api/comments/' + commentJSON.id,
+            url: '/api/comments/deleteComment' + commentJSON.id,
             success: success,
             error: error
         });
@@ -169,18 +169,7 @@
     timeFormatter: function(time) {
         return moment(time).fromNow();
     },
-    maxRepliesVisible: 10,
-    getComments: function(success, error) {
-        var commentsArray = [{
-            id: 1,
-            created: '2015-10-01',
-            content: 'Lorem ipsum dolort sit amet',
-            fullname: 'Simon Powell',
-            upvote_count: 2,
-            user_has_upvoted: false
-        }];
-        success(commentsArray);
-    }
+    maxRepliesVisible: 10
 });
 </script>
 </body>

@@ -46,5 +46,23 @@ public class CommentController {
     public final void addComment(@RequestBody Comment comment) {
     }
 
+    /**
+     * Get the variants for the Analyses.
+     * @param comment
+     */
+    @RequestMapping(method = RequestMethod.DELETE, value = "/deleteComment")
+    @ResponseBody
+    public final void deleteComment(@PathVariable('id') String commentID) {
+    }
+
+    /**
+     * Get the variants for the Analyses.
+     * @param comment
+     */
+    @RequestMapping(method = RequestMethod.POST, value = "{id}/upvotes/")
+    @ResponseBody
+    public final void deleteComment(@PathVariable('id') String commentID) {
+    }
+
 
 }
