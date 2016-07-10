@@ -15,21 +15,22 @@ public class LoginDao {
 	private Statement statement;
 
 	public User validateUserNameAndPassword(User user) throws SQLException{
-		String query = "";
+		String query = "select * from TLB_USER_DETAILS where TLB_USER_NAME = '"+user.getUserName()+"' and TLB_USER_PASSWORD = '"+user.getPassword()+"';";
 		ResultSet resultSet = null;
+		
 		User user2 = null;
 		try {
+			
             connection = ConnectionManager.getConnection();
             statement = connection.createStatement();
             resultSet = statement.executeQuery(query);
             while (resultSet.next()) {
-                String userName = resultSet.getString("USERNAME");
-                //String password = resultSet.getInt("PASSWORD");
-                Long accountNumber = resultSet.getLong("ACCOUNT_NUMBER");
-                
+                String userName = resultSet.getString("TLB_USER_NAME");
+                Long accountNumber = resultSet.getLong("TLB_USER_ACCOUNT_NUMBER");
                 user2 = new User();
                 user2.setUserName(userName);
                 user2.setAccountNumber(accountNumber);
+                user2.setIfValid(true);
                
             }
            
