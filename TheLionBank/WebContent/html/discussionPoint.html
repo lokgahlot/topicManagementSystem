@@ -21,9 +21,6 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
     <script type="text/javascript" src="../js/jquery-comments.js"></script>
 
-    <!-- Custom styles for this template -->
-    <link href="navbar-fixed-top.css" rel="stylesheet">
-
 </head>
 
 <body>
@@ -69,9 +66,9 @@
                     <th>Topic 2</th>
                     <th>Topic 3</th>
                     <th>Topic 4</th>
-                    <th><input name="addTopic" type="text" placeholder="Topic Name"  required />
-                        <input type="hidden" name = "topicname" value = "topicPost" />
-                        <input type=submit value='Add Topic' id='addTopic'/></th>
+                    <th><form method="post" action="/api/topic/addTopic"><input name="addTopic" type="text" placeholder="Topic Name"  required />
+                        <input type="hidden" name = "topicname" value = "/api/topic/addTopic" />
+                        <input type=submit value='Add Topic' id='addTopic'/></form></th>
                 </tr>
             </table>
         </div>
@@ -90,17 +87,6 @@
 </div>
 <script type="text/javascript" src="../js/jquery.nicescroll.min.js"></script>
 <script type="text/javascript">
-			 $(document).ready(function() {
-				$('#simple-menu').sidr({
-				side: 'right'
-			});
-			});
-			$('.responsive-menu-button').sidr({
-				name: 'sidr-main',
-				source: '#navigation',
-				side: 'right'
-
-				});
 			$(document).ready(
 			function() {
 			$("html").niceScroll({cursorborder:"0px solid #fff",cursorwidth:"5px",scrollspeed:"70"});
@@ -109,6 +95,81 @@
 		</script>
 <script  type="text/javascript">
     $('#comments-container').comments({
+    enableReplying: false,
+    getComments: function(success, error) {
+        $.ajax({
+            type: 'get',
+            url: '/api/comments/',
+            success: function(commentsArray) {
+                success(commentsArray)
+            },
+            error: error
+        });
+    },
+    postComment: function(commentJSON, success, error) {
+        $.ajax({
+            type: 'post',
+            url: '/api/comments/',
+            data: commentJSON,
+            success: function(comment) {
+                success(comment)
+            },
+            error: error
+        });
+    },
+    refresh: function() {
+        $('#comments-container').addClass('rendered');
+    },
+    putComment: function(commentJSON, success, error) {
+        $.ajax({
+            type: 'put',
+            url: '/api/comments/' + commentJSON.id,
+            data: commentJSON,
+            success: function(comment) {
+                success(comment)
+            },
+            error: error
+        });
+    },
+    deleteComment: function(commentJSON, success, error) {
+        $.ajax({
+            type: 'delete',
+            url: '/api/comments/' + commentJSON.id,
+            success: success,
+            error: error
+        });
+    },
+    upvoteComment: function(commentJSON, success, error) {
+        var commentURL = '/api/comments/' + commentJSON.id;
+        var upvotesURL = commentURL + '/upvotes/';
+
+        if(commentJSON.userHasUpvoted) {
+            $.ajax({
+                type: 'post',
+                url: upvotesURL,
+                data: {
+                    comment: commentJSON.id
+                },
+                success: function() {
+                    success(commentJSON)
+                },
+                error: error
+            });
+        } else {
+            $.ajax({
+                type: 'delete',
+                url: upvotesURL + upvoteId,
+                success: function() {
+                    success(commentJSON)
+                },
+                error: error
+            });
+        }
+    },
+    timeFormatter: function(time) {
+        return moment(time).fromNow();
+    },
+    maxRepliesVisible: 10,
     getComments: function(success, error) {
         var commentsArray = [{
             id: 1,
